@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class GameController extends Controller
 {
+    private $game;
+    public function __construct(Game $game)
+    {
+        $this->game = $game;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,8 +19,10 @@ class GameController extends Controller
      */
     public function index()
     {
-       $game = Game::all();
-       return $game->toJson();
+//       $game = Game::all();
+//       return $game->toJson();
+        //return response()->json($this->game->all());
+        return response()->json($this->game->paginate(10));
     }
 
     /**
@@ -36,9 +43,15 @@ class GameController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        Game::create($data);
-       return back()->with(['success' => "Game inserted"]);
+       try{
+           $gameData = $request->all();
+           $this->game->create($gameData);
+           $return = ['data'=> ['msg'=>'Game criado com sucesso']];
+           return response()->json($return, 201);
+       }catch(\Exception $e){
+            return response()->json("Houve um erro ao realizar operação de salvar");
+       }
+
     }
 
     /**
@@ -49,7 +62,11 @@ class GameController extends Controller
      */
     public function show($id)
     {
-        //
+        $game = $this->game->find($id);
+        if(! $game) return response()->json("Nao encontrado");
+
+        $data = ['data' => $game];
+        return response()->json($data);
     }
 
     /**
@@ -72,7 +89,20 @@ class GameController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        try{
+            $gameData = $request->all();
+
+            $game = $this->game->find($id);
+
+            $game->update($gameData);
+            $return = ['data'=> ['msg'=> 'Produto atualizado com sucesso']];
+
+            return response()->json($return, 201);
+
+        }catch(\Exception $e){
+            return response()->json("Houve um erro ao realizar operação de salvar");
+        }
     }
 
     /**
