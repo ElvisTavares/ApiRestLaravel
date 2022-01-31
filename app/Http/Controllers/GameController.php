@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Game;
 use Illuminate\Http\Request;
 
 class GameController extends Controller
@@ -13,7 +14,8 @@ class GameController extends Controller
      */
     public function index()
     {
-        //
+       $game = Game::all();
+       return $game->toJson();
     }
 
     /**
@@ -34,7 +36,9 @@ class GameController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        Game::create($data);
+       return back()->with(['success' => "Game inserted"]);
     }
 
     /**
