@@ -111,8 +111,13 @@ class GameController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Game $id)
     {
-        //
+        try{
+            $id->delete();
+            return response()->json(['data'=> ['msg'=> 'Produto ' . $id->name . ' removido com sucesso']], 200);
+        }catch(\Exception $e){
+            return response()->json('Houve um erro', 500);
+        }
     }
 }

@@ -20,9 +20,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::namespace('Api')->name('api')->group(function(){
-   Route::get('/', [\App\Http\Controllers\GameController::class, 'index'])->name('game');
-   Route::get('list/{id}',[GameController::class, 'show'])->name('show_game');
-   Route::post('/create', [GameController::class, 'store'])->name('create_game');
-   Route::put('edit/{id}', [GameController::class, 'update'])->name('update_game');
-
+    Route::get('/', [\App\Http\Controllers\GameController::class, 'index'])->name('game');
+    Route::get('list/{id}',[GameController::class, 'show'])->name('show_game');
+    Route::post('/create', [GameController::class, 'store'])->name('create_game');
+    Route::put('edit/{id}', [GameController::class, 'update'])->name('update_game');
+    Route::delete('delete/{id}', [GameController::class, 'destroy'])->name('delete_game');
 });
